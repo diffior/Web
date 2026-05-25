@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Notes — Christian Campbell</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="page-bg">
+  <a href="index.html" class="back-nav">Home</a>
+
+  <div class="notes-container">
+
+    <div class="notes-header">
+      <h1>Notes</h1>
+      <!--
+        EDIT MODE: Click to unlock all card backs for editing.
+        Notes are saved automatically to your browser's localStorage —
+        they persist across sessions on this device.
+
+        ✏️ To add or remove topics, edit the TOPICS object in the <script> below.
+      -->
+      <button class="btn" id="editToggle" onclick="toggleEdit()">Edit Mode</button>
+    </div>
+
+    <div class="discipline-section">
+      <h2>Backend</h2>
+      <div class="flashcard-grid" id="grid-backend"></div>
+    </div>
+
+    <div class="discipline-section">
+      <h2>DevOps</h2>
+      <div class="flashcard-grid" id="grid-devops"></div>
+    </div>
+
+    <div class="discipline-section">
+      <h2>Database</h2>
+      <div class="flashcard-grid" id="grid-database"></div>
+    </div>
+
+    <div class="discipline-section">
+      <h2>Data Analytics</h2>
+      <div class="flashcard-grid" id="grid-analytics"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="cursor"></div>
+<script>
+  // ✏️ ADD / REMOVE topics here — new cards appear automatically.
+  const TOPICS = {
+    backend:  ['REST APIs', 'GraphQL', 'Microservices', 'Auth & JWT', 'Caching', 'Message Queues', 'WebSockets', 'Rate Limiting'],
+    devops:   ['Docker', 'Kubernetes', 'CI/CD Pipelines', 'AWS', 'Azure', 'Terraform', 'Monitoring', 'Linux Admin'],
+    database: ['SQL', 'NoSQL', 'Indexing', 'Transactions', 'Query Optimization', 'Replication', 'Data Modeling', 'ORMs'],
+    analytics:['ETL Pipelines', 'Data Warehousing', 'Visualization', 'Python / Pandas', 'Statistical Analysis', 'BI Tools', 'SQL Analytics', 'Data Cleaning']
+  };
+
+  let editMode = false;
+
+  function storageKey(section, topic) {
+    return `note__${section}__${topic}`;
+  }
+
+  function buildCards() {
+    for (const [section, topics] of Object.entries(TOPICS)) {
+      const grid = document.getElementById(`grid-${section}`);
+      if (!grid) continue;
+
+      topics.forEach(topic => {
+        const key   = storageKey(section, topic);
+        const saved = localStorage.getItem(key) || '';
+
+        const card = document.createElement('div');
+        card.className = 'flashcard';
+        card.innerHTML = `
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <h3>${topic}</h3>
+              <span class="card-hint">click to open</span>
+            </div>
+            <div class="flashcard-back">
+              <div
+                class="note-content"
+                contenteditable="false"
+                data-key="${key}"
+                data-placeholder="No notes yet — enable Edit Mode to write."
+              >${saved ? escapeHtml(saved) : ''}</div>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', e => {
+          // When in edit mode and card is already open, let user type — don't flip back
+          if (editMode && card.classList.contains('flipped')) return;
+          card.classList.toggle('flipped');
+        });
+
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  function toggleEdit() {
+    editMode = !editMode;
+    const btn = document.getElementById('editToggle');
+    btn.classList.toggle('active', editMode);
+    btn.textContent = editMode ? 'Save & Exit Edit' : 'Edit Mode';
+
+    document.querySelectorAll('.note-content').forEach(el => {
+      el.contentEditable = editMode ? 'true' : 'false';
+      if (!editMode) {
+        // Save on exit
+        localStorage.setItem(el.dataset.key, el.innerText.trim());
+      }
+    });
+  }
+
+  // Auto-save while typing
+  document.addEventListener('input', e => {
+    if (e.target.classList.contains('note-content')) {
+      localStorage.setItem(e.target.dataset.key, e.target.innerText.trim());
+    }
+  });
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Cursor
+  const cursor = document.querySelector('.cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.top  = e.clientY + 'px';
+    cursor.style.left = e.clientX + 'px';
+  });
+  document.addEventListener('click', () => {
+    cursor.classList.add('expand');
+    setTimeout(() => cursor.classList.remove('expand'), 500);
+  });
+
+  buildCards();
+</script>
+
+</body>
+</html>
