@@ -392,12 +392,12 @@ a { color: inherit; text-decoration: none; }
 
 /* ===================== PROJECTS ===================== */
 .projects-container {
-  max-width: 680px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 40px 36px 100px;
   display: flex;
   flex-direction: column;
-  gap: 60px;
+  gap: 52px;
   align-items: center;
   text-align: center;
 }
@@ -452,6 +452,141 @@ a { color: inherit; text-decoration: none; }
   transition: color 0.3s;
 }
 .github-card:hover span { color: var(--accent); }
+
+/* ===================== REPO CARDS ===================== */
+.repos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.repos-loading {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 40px 0;
+  text-align: center;
+}
+
+.repo-card {
+  border: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.repo-card:hover { border-color: #3a3a3a; transform: translateY(-3px); }
+
+.repo-name {
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.repo-desc {
+  font-size: 0.72rem;
+  color: #666;
+  line-height: 1.65;
+  flex: 1;
+}
+.repo-meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+.repo-lang, .repo-stars {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ===================== STATS PAGE ===================== */
+.stats-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 36px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+  text-align: center;
+}
+
+.stats-header h1 {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 200;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.stats-header p {
+  margin-top: 12px;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stats-card {
+  width: 100%;
+  border: 1px solid var(--border);
+  padding: 52px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.stats-icon { color: var(--muted); opacity: 0.5; }
+
+.stats-label {
+  font-size: 0.72rem;
+  color: #555;
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  max-width: 340px;
+}
+
+.stats-btn {
+  margin-top: 8px;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  padding: 11px 28px;
+}
+
+.stats-meta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+}
+.stats-meta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.stats-meta-item:last-child { border-bottom: none; }
+.stats-meta-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stats-meta-value {
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: #555;
+  text-align: right;
+}
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 900px) {
