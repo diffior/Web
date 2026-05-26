@@ -17,109 +17,22 @@
     <div class="resume-header">
       <h1>Resume</h1>
       <div class="resume-actions">
-        <!--
-          ✏️ DOWNLOAD: Drop your resume file as Web/resume.pdf
-             The download button will activate automatically once the file is there.
-        -->
-        <a href="resume.pdf" download="Christian_Campbell_Resume.pdf" class="btn btn-primary" id="downloadBtn">
+        <a href="resume.pdf" download="Christian_Campbell_Resume.pdf" class="btn btn-primary">
           ↓ &nbsp;Download
         </a>
-        <button class="btn" onclick="document.getElementById('filePicker').click()">
-          ↑ &nbsp;Load PDF
-        </button>
-        <input type="file" id="filePicker" accept=".pdf" style="display:none">
       </div>
     </div>
 
-    <!--
-      DROP ZONE — shown when no PDF is loaded.
-      ✏️ To embed your resume by default, add your PDF as Web/resume.pdf
-         and the iframe below will show it automatically on page load.
-    -->
-    <div class="resume-drop" id="dropZone">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="12" y1="18" x2="12" y2="12"/>
-        <line x1="9" y1="15" x2="15" y2="15"/>
-      </svg>
-      <p>Drop resume.pdf into the Web/ folder</p>
-      <small>or click "Load PDF" above to preview locally</small>
+    <div class="resume-wrapper">
+      <iframe
+        src="resume.pdf#toolbar=0&navpanes=0&scrollbar=0"
+        class="resume-frame"
+        title="Christian Campbell Resume"
+      ></iframe>
     </div>
-
-    <iframe
-      src="resume.pdf"
-      class="resume-frame"
-      id="resumeFrame"
-      title="Christian Campbell Resume"
-      onload="handleFrameLoad(this)"
-      onerror="handleFrameError()"
-    ></iframe>
 
   </div>
 </div>
-
-<div class="cursor"></div>
-<script>
-  const cursor = document.querySelector('.cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.top  = e.clientY + 'px';
-    cursor.style.left = e.clientX + 'px';
-  });
-  document.addEventListener('click', () => {
-    cursor.classList.add('expand');
-    setTimeout(() => cursor.classList.remove('expand'), 500);
-  });
-
-  const frame   = document.getElementById('resumeFrame');
-  const drop    = document.getElementById('dropZone');
-  const picker  = document.getElementById('filePicker');
-
-  function showFrame() {
-    drop.style.display  = 'none';
-    frame.classList.add('visible');
-  }
-
-  function handleFrameLoad(el) {
-    // If the iframe actually loaded something (PDF present), show it
-    try {
-      if (el.contentDocument && el.contentDocument.body.innerHTML === '') return;
-      showFrame();
-    } catch(e) {
-      // cross-origin (e.g. Google Drive embed) — just show it
-      showFrame();
-    }
-  }
-
-  function handleFrameError() {
-    // PDF not found — keep drop zone visible
-  }
-
-  // Local file picker
-  picker.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    frame.src = url;
-    showFrame();
-    document.getElementById('downloadBtn').href = url;
-  });
-
-  // Drag and drop onto the drop zone
-  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag-over'); });
-  drop.addEventListener('dragleave', () => drop.classList.remove('drag-over'));
-  drop.addEventListener('drop', e => {
-    e.preventDefault();
-    drop.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type === 'application/pdf') {
-      const url = URL.createObjectURL(file);
-      frame.src = url;
-      showFrame();
-    }
-  });
-  drop.addEventListener('click', () => picker.click());
-</script>
 
 </body>
 </html>

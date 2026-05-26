@@ -2,12 +2,12 @@
 
 :root {
   --bg: #000;
-  --surface: #0d0d0d;
-  --border: #222;
-  --muted: #555;
-  --text: #d8d8d8;
+  --surface: #080808;
+  --border: #1a1a1a;
+  --muted: #484848;
+  --text: #c8c8c8;
   --accent: #fff;
-  --card-size: clamp(190px, 22vw, 300px);
+  --card-size: clamp(260px, 28vw, 390px);
 }
 
 body {
@@ -19,37 +19,10 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-/* === CURSOR === */
-.cursor {
-  width: 20px;
-  height: 20px;
-  border: 1px solid rgba(255,255,255,0.5);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 200ms ease-out, border-color 200ms;
-  transform: translate(-50%, -50%);
-}
-.cursor::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 6px solid rgba(128,128,128,0.25);
-  top: -6px;
-  left: -6px;
-}
-.cursor.expand {
-  transform: translate(-50%, -50%) scale(2.2);
-  border-color: rgba(255,255,255,0.2);
-}
-
 /* === PAGE BG === */
 .page-bg {
   min-height: 100vh;
-  background: radial-gradient(ellipse at 50% 50%, #000 0%, #0a0a0a 45%, #161616 100%);
+  background: #000;
   display: flex;
   flex-direction: column;
 }
@@ -73,13 +46,14 @@ a { color: inherit; text-decoration: none; }
 /* ===================== SPLASH ===================== */
 .splash-bg {
   min-height: 100vh;
-  background: radial-gradient(ellipse at 50% 50%, #000 0%, #0a0a0a 40%, #181818 100%);
+  background: radial-gradient(ellipse at 50% 20%, #0d0d0d 0%, #000 55%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 72px;
   padding: 40px 20px;
+  overflow: hidden;
 }
 
 .splash-header { text-align: center; }
@@ -100,9 +74,11 @@ a { color: inherit; text-decoration: none; }
 
 .card-grid {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 14px;
+  flex-wrap: nowrap;
   justify-content: center;
+  transition: transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
 }
 
 .card {
@@ -116,6 +92,7 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
   transition: border-color 0.4s, transform 0.4s;
   cursor: pointer;
+  flex-shrink: 0;
 }
 .card-bg {
   position: absolute;
@@ -240,12 +217,13 @@ a { color: inherit; text-decoration: none; }
 
 /* ===================== RESUME ===================== */
 .resume-container {
-  max-width: 900px;
+  max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
-  padding: 32px 36px 100px;
+  padding: 32px 36px 60px;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 28px;
 }
 .resume-header {
   display: flex;
@@ -282,31 +260,22 @@ a { color: inherit; text-decoration: none; }
 .btn-primary { border-color: #333; color: var(--text); }
 .btn-primary:hover { border-color: var(--accent); }
 
-.resume-drop {
-  border: 1px dashed #2a2a2a;
-  padding: 64px 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  transition: border-color 0.3s;
-  text-align: center;
+.resume-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  min-height: 34vh;
+  height: 82vh;
 }
-.resume-drop:hover { border-color: #3a3a3a; }
-.resume-drop.drag-over { border-color: #555; }
-.resume-drop svg { color: var(--muted); opacity: 0.4; }
-.resume-drop p { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.12em; }
-.resume-drop small { font-size: 0.65rem; color: #333; letter-spacing: 0.1em; }
 
 .resume-frame {
   width: 100%;
-  height: 75vh;
-  border: 1px solid var(--border);
-  display: none;
-  background: #080808;
+  height: calc(100% + 50px);
+  margin-top: -50px;
+  border: none;
+  background: #000;
+  display: block;
 }
-.resume-frame.visible { display: block; }
 
 /* ===================== NOTES ===================== */
 .notes-container {
@@ -458,12 +427,23 @@ a { color: inherit; text-decoration: none; }
 }
 .github-card:hover { border-color: #3a3a3a; transform: translateY(-5px); }
 .github-icon {
-  width: 52px;
-  height: 52px;
+  width: 88px;
+  height: 88px;
   color: var(--muted);
-  transition: color 0.3s;
+  animation: github-float 3.5s ease-in-out infinite;
+  transition: color 0.4s;
 }
-.github-card:hover .github-icon { color: var(--text); }
+.github-card:hover .github-icon {
+  color: var(--accent);
+  animation-play-state: paused;
+}
+
+@keyframes github-float {
+  0%   { transform: translateY(0px) rotate(0deg); opacity: 0.45; }
+  30%  { transform: translateY(-11px) rotate(-3deg); opacity: 0.75; }
+  60%  { transform: translateY(-6px) rotate(2deg); opacity: 0.6; }
+  100% { transform: translateY(0px) rotate(0deg); opacity: 0.45; }
+}
 .github-card span {
   font-size: 0.65rem;
   letter-spacing: 0.35em;
@@ -474,13 +454,20 @@ a { color: inherit; text-decoration: none; }
 .github-card:hover span { color: var(--accent); }
 
 /* ===================== RESPONSIVE ===================== */
+@media (max-width: 900px) {
+  :root { --card-size: clamp(200px, 42vw, 280px); }
+  .card-grid { flex-wrap: wrap; }
+}
+
 @media (max-width: 640px) {
+  :root { --card-size: clamp(150px, 44vw, 220px); }
   .profile-section { flex-direction: column; text-align: center; align-items: center; }
   .social-links { justify-content: center; }
   .about-container,
   .resume-container,
   .notes-container,
   .projects-container { padding: 24px 20px 80px; }
-  .card-grid { gap: 10px; }
+  .card-grid { gap: 10px; flex-wrap: wrap; transform: none !important; }
   .github-card { padding: 40px 28px; }
+  .resume-wrapper { height: 60vh; }
 }

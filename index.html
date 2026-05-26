@@ -15,10 +15,9 @@
     <p>Software Engineer &nbsp;·&nbsp; Denver, CO</p>
   </header>
 
-  <nav class="card-grid">
+  <nav class="card-grid" id="cardGrid">
 
     <a href="about.html" class="card card-about">
-      <!-- ✏️ To use a real photo: add style="background-image:url('images/your-photo.jpg')" to the div below -->
       <div class="card-bg"></div>
       <div class="card-label">
         <span>01</span>
@@ -53,16 +52,17 @@
   </nav>
 </div>
 
-<div class="cursor"></div>
 <script>
-  const cursor = document.querySelector('.cursor');
+  const grid = document.getElementById('cardGrid');
+  let raf;
+
   document.addEventListener('mousemove', e => {
-    cursor.style.top  = e.clientY + 'px';
-    cursor.style.left = e.clientX + 'px';
-  });
-  document.addEventListener('click', () => {
-    cursor.classList.add('expand');
-    setTimeout(() => cursor.classList.remove('expand'), 500);
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const ratio = e.clientX / window.innerWidth; // 0 → 1
+      const shift = (ratio - 0.5) * -120;          // -60 → +60 px
+      grid.style.transform = `translateX(${shift}px)`;
+    });
   });
 </script>
 
